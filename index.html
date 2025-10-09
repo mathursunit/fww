@@ -1,52 +1,98 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<link href="manifest.json" rel="manifest"/>
-<meta content="#6aaa64" name="theme-color"/>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Fun with words</title>
-<!-- Clear Sans webfont for NYTimes Wordle look -->
-<link href="https://cdn.jsdelivr.net/gh/resir014/Clear-Sans-Webfont@v1.1.1/css/clear-sans.css" rel="stylesheet"/>
-<link href="style.css" rel="stylesheet"/>
-<link href="logo.png" rel="apple-touch-icon"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="FunWords" name="apple-mobile-web-app-title"/><meta content="default" name="apple-mobile-web-app-status-bar-style"/><link href="/icons/icon-120x120.png" rel="apple-touch-icon" sizes="120x120"/><link href="/icons/icon-152x152.png" rel="apple-touch-icon" sizes="152x152"/><link href="/icons/icon-167x167.png" rel="apple-touch-icon" sizes="167x167"/><link href="/icons/icon-180x180.png" rel="apple-touch-icon" sizes="180x180"/><link href="/splash/launch-640x1136.png" media="(device-width: 320px)" rel="apple-touch-startup-image"/><link href="/splash/launch-750x1334.png" media="(device-width: 375px)" rel="apple-touch-startup-image"/><link href="/splash/launch-1242x2208.png" media="(device-width: 414px)" rel="apple-touch-startup-image"/><link href="/splash/launch-1536x2048.png" media="(device-width: 768px)" rel="apple-touch-startup-image"/><link href="/splash/launch-1668x2224.png" media="(device-width: 834px)" rel="apple-touch-startup-image"/><link href="/splash/launch-2048x2732.png" media="(device-width: 1024px)" rel="apple-touch-startup-image"/></head>
-<body tabindex="0">
-<div id="countdown">Next word in 00:00:00</div>
-<img alt="Fun with words Daily Wordle" class="logo" src="/logo.png"/>
-<!-- Toast container -->
-<div id="toast-container"></div>
-<div class="game-container">
-<div id="grid">
-<div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
-<div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
-<div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
-<div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
-<div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
-<div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
-</div>
-<div id="keyboard">
-<div class="key-row">
-<button class="key">Q</button><button class="key">W</button><button class="key">E</button><button class="key">R</button><button class="key">T</button><button class="key">Y</button><button class="key">U</button><button class="key">I</button><button class="key">O</button><button class="key">P</button>
-</div>
-<div class="key-row">
-<button class="key">A</button><button class="key">S</button><button class="key">D</button><button class="key">F</button><button class="key">G</button><button class="key">H</button><button class="key">J</button><button class="key">K</button><button class="key">L</button>
-</div>
-<div class="key-row">
-<button class="key action" data-key="ENTER">Enter</button><button class="key">Z</button><button class="key">X</button><button class="key">C</button><button class="key">V</button><button class="key">B</button><button class="key">N</button><button class="key">M</button><button class="key action" data-key="BACKSPACE">⌫</button>
-</div>
-</div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-<script src="script.js"></script>
-<p id="disclaimer"><strong>Disclaimer: This is a fun project to learn coding and has no commercial value. All rights are with the amazing NYTimes only.</strong></p>
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js')
-      .catch(err => console.warn('SW registration failed:', err));
-  });
-}
-</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fun with words</title>
+  <!-- Clear Sans webfont for NYTimes Wordle look -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/resir014/Clear-Sans-Webfont@v1.1.1/css/clear-sans.css">
+  <link rel="stylesheet" href="style.css">
+  <meta name="theme-color" content="#111111">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.png">
+
+</head>
+<body data-sunsar-version="v2" tabindex="0">
+
+  <header class="topbar">
+    <div class="brand">
+      <button id="btn-menu" aria-label="Menu" class="icon-btn">☰</button>
+      <h1 class="app-title">Fun with words</h1>
+    </div>
+    <div class="actions">
+      <button id="btn-stats" class="pill-btn" aria-haspopup="dialog">Stats</button>
+      <button id="btn-share" class="pill-btn">Share</button>
+      <button id="btn-theme" class="pill-btn" aria-pressed="false">Dark</button>
+      <button id="btn-hard" class="pill-btn" aria-pressed="false" title="Hard mode (must use revealed letters)">Hard</button>
+    </div>
+  </header>
+
+
+  <!-- Settings / Menu Modal -->
+  <dialog id="dlg-menu">
+    <form method="dialog" class="dialog-body">
+      <h2>Settings</h2>
+      <label class="row"><input type="checkbox" id="opt-contrast"> High contrast colors</label>
+      <label class="row"><input type="checkbox" id="opt-animations" checked> Animations</label>
+      <div class="dialog-actions">
+        <button value="cancel">Close</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Stats Modal -->
+  <dialog id="dlg-stats" aria-labelledby="stats-title">
+    <div class="dialog-body">
+      <h2 id="stats-title">Your stats</h2>
+      <div id="stats-grid" class="stats-grid">
+        <div><strong>Played</strong><div id="stat-played">0</div></div>
+        <div><strong>Win %</strong><div id="stat-winpct">0</div></div>
+        <div><strong>Current Streak</strong><div id="stat-streak">0</div></div>
+        <div><strong>Max Streak</strong><div id="stat-maxstreak">0</div></div>
+      </div>
+      <div>
+        <canvas id="guess-dist" width="400" height="180" aria-label="Guess distribution bar chart"></canvas>
+      </div>
+      <div class="dialog-actions">
+        <button id="btn-stats-close">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Toast container (ensure exists) -->
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+
+  <div id="countdown">Next word in 00:00:00</div>
+  <img src="/logo.png" alt="Fun with words Daily Wordle" class="logo">
+  <!-- Toast container -->
+  <div id="toast-container"></div>
+  <div class="game-container">
+    <div id="grid">
+      <div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
+      <div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
+      <div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
+      <div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
+      <div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
+      <div class="row"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
+    </div>
+    <div id="keyboard">
+      <div class="key-row">
+        <button class="key">Q</button><button class="key">W</button><button class="key">E</button><button class="key">R</button><button class="key">T</button><button class="key">Y</button><button class="key">U</button><button class="key">I</button><button class="key">O</button><button class="key">P</button>
+      </div>
+      <div class="key-row">
+        <button class="key">A</button><button class="key">S</button><button class="key">D</button><button class="key">F</button><button class="key">G</button><button class="key">H</button><button class="key">J</button><button class="key">K</button><button class="key">L</button>
+      </div>
+      <div class="key-row">
+        <button class="key action" data-key="ENTER">Enter</button><button class="key">Z</button><button class="key">X</button><button class="key">C</button><button class="key">V</button><button class="key">B</button><button class="key">N</button><button class="key">M</button><button class="key action" data-key="BACKSPACE">⌫</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+
+  <p id="disclaimer"><strong>Disclaimer: This is a fun project to learn coding and has no commercial value. All rights are with the amazing NYTimes only.</strong></p>
+  <script src="app-enhancements.js"></script>
 </body>
+
 </html>

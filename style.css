@@ -172,3 +172,21 @@ h1 {
   word-wrap: break-word;
   white-space: normal;
 }
+
+
+/* v2 additions */
+:root{ --bg:#111; --fg:#f1f1f1; --muted:#aaa; --accent:#4caf50; --accent2:#f59e0b;}
+body{ background: var(--bg); color: var(--fg); }
+.topbar{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; padding:.5rem 1rem; border-bottom:1px solid #222; position:sticky; top:0; background:var(--bg); z-index:10;}
+.topbar .brand{ display:flex; align-items:center; gap:.5rem;}
+.app-title{ font-size:1.1rem; margin:0;}
+.icon-btn,.pill-btn{ border:1px solid #333; background:#1a1a1a; color:var(--fg); padding:.35rem .7rem; border-radius:999px; cursor:pointer}
+.icon-btn:hover,.pill-btn:hover{ background:#222; }
+dialog{border:1px solid #333; border-radius:12px; padding:1rem; background:#121212; color:var(--fg);}
+.dialog-body .row{ margin:.5rem 0;}
+.dialog-actions{ display:flex; justify-content:flex-end; gap:.5rem; margin-top:1rem;}
+#toast-container{ position:fixed; bottom:1rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:.5rem; z-index:100;}
+.toast{ background:#222; color:var(--fg); padding:.5rem .75rem; border-radius:8px; border:1px solid #333; }
+.stats-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:.5rem; margin-bottom:1rem;}
+.high-contrast .tile.correct{ background:#f5793a !important; }
+.high-contrast .tile.present{ background:#85c0f9 !important; }
